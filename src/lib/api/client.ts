@@ -6,8 +6,8 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 // API Configuration
 const API_CONFIG = {
-  // Use localhost for development, can be overridden with env var
-  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1',
+  // Use ngrok public URL for mobile access, fallback to localhost for development
+  baseURL: import.meta.env.VITE_API_URL || 'https://76a27baf102a.ngrok-free.app/api/v1',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
