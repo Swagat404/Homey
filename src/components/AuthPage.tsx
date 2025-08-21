@@ -435,15 +435,15 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
       
       {/* Interior Lighting System */}
       <group>
-        {/* Main Interior Warm Glow - More Diffused */}
+        {/* Main Interior Warm Glow - Smaller Diffused Circle */}
         <mesh position={[0, 1.5, 1.8]}>
-          <sphereGeometry args={[3]} />
+          <sphereGeometry args={[1.8]} />
           <meshStandardMaterial 
             color="#ffa500"
             transparent
-            opacity={0.04}
+            opacity={0.03}
             emissive="#ffa500"
-            emissiveIntensity={0.1}
+            emissiveIntensity={0.08}
           />
         </mesh>
         
@@ -730,18 +730,28 @@ const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
     if (!isAuthenticated) {
       if (showWelcomeText) {
         // Initial position: Center view for easy house clicking
-        targetPosition.current.set(0, 3, 12);
+        targetPosition.current.set(0, 4, 15);
         targetLookAt.current.set(0, 1, 0);
       } else {
-        // Optimized camera positioning for narrow iPhone screens
+        // B-roll camera movements with popup-centered end positions
         if (mode === 'login') {
-          // Login: Position camera to show left form clearly on mobile
-          targetPosition.current.set(4, 3, 10); // Closer, more centered for mobile
-          targetLookAt.current.set(0, 1, 0); // Look at house center
+          // Login: Camera orbits to right side, ends with left form centered
+          const angle = timeRef.current * 0.15; // Slow rotation
+          targetPosition.current.set(
+            5 + Math.sin(angle) * 1.5, // Orbit around house
+            3.5 + Math.cos(timeRef.current * 0.1) * 0.3, // Gentle vertical float
+            8 + Math.cos(angle) * 1
+          );
+          targetLookAt.current.set(-0.8, 1.2, 0); // Look toward left form position
         } else {
-          // Signup: Position camera to show right form clearly on mobile
-          targetPosition.current.set(-4, 3, 10); // Closer, more centered for mobile
-          targetLookAt.current.set(0, 1, 0); // Look at house center
+          // Signup: Camera orbits to left side, ends with right form centered
+          const angle = timeRef.current * 0.15; // Slow rotation
+          targetPosition.current.set(
+            -5 - Math.sin(angle) * 1.5, // Orbit around house (opposite direction)
+            3.5 + Math.cos(timeRef.current * 0.1) * 0.3, // Gentle vertical float
+            8 + Math.cos(angle) * 1
+          );
+          targetLookAt.current.set(0.8, 1.2, 0); // Look toward right form position
         }
       }
     }
@@ -1372,11 +1382,11 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           
 
           
-          {/* Form in 3D Space - iPhone Optimized Positioning */}
+          {/* Form in 3D Space - Centered for Rotation View */}
           {showForm && (
             <FloatingForm
               mode={mode}
-              position={mode === 'login' ? [-2, 1.5, 4] : [2, 1.5, 4]}
+              position={mode === 'login' ? [-2.5, 1.8, 3] : [2.5, 1.8, 3]}
               onSubmit={mode === 'login' ? handleLogin : handleRegister}
               formData={mode === 'login' ? loginForm : registerForm}
               setFormData={mode === 'login' ? setLoginForm : setRegisterForm}
