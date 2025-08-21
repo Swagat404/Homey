@@ -741,12 +741,7 @@ const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
         // B-roll camera movements with popup-centered end positions
         timeRef.current += delta;
         
-        // Stop movement after 4 seconds to let OrbitControls take over
-        if (timeRef.current > 4) {
-          movementCompleted.current = true;
-          return; // Let OrbitControls handle from here
-        }
-        
+        // Calculate target positions first
         if (mode === 'login') {
           // Login: Camera orbits to right side, ends with left form centered
           const angle = timeRef.current * 0.15; // Slow rotation
@@ -767,9 +762,22 @@ const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
           targetLookAt.current.set(0.2, 1.2, 0); // Look toward right form position
         }
         
-        // Smooth camera movement with cinematic feel
-        currentPosition.current.lerp(targetPosition.current, delta * 1.2);
-        currentLookAt.current.lerp(targetLookAt.current, delta * 1.2);
+        // Gradually reduce camera control and let OrbitControls take over smoothly
+        if (timeRef.current > 1.8) {
+          // Start reducing camera control influence after 1.8 seconds
+          const fadeOutFactor = Math.max(0, 1 - (timeRef.current - 1.8) / 0.7); // Fade over 0.7 seconds
+          if (fadeOutFactor <= 0.05) {
+            movementCompleted.current = true;
+            return; // Let OrbitControls handle from here
+          }
+          // Reduce lerp speed to gradually hand over control
+          currentPosition.current.lerp(targetPosition.current, delta * 1.2 * fadeOutFactor);
+          currentLookAt.current.lerp(targetLookAt.current, delta * 1.2 * fadeOutFactor);
+        } else {
+          // Normal camera movement
+          currentPosition.current.lerp(targetPosition.current, delta * 1.2);
+          currentLookAt.current.lerp(targetLookAt.current, delta * 1.2);
+        }
         
         camera.position.copy(currentPosition.current);
         camera.lookAt(currentLookAt.current);

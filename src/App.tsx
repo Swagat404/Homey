@@ -221,10 +221,10 @@ const App: React.FC = () => {
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          {/* Backend Status Indicator */}
+          {/* Backend Status Indicator - Minimally Invasive */}
           {backendStatus === 'offline' && (
-            <div className="fixed top-0 left-0 right-0 z-50 bg-red-500 text-white text-center p-2 text-sm">
-              ⚠️ Backend is offline. Please ensure the server is running on localhost:8000
+            <div className="fixed top-4 left-4 z-50 bg-red-500/90 backdrop-blur-sm text-white p-2 rounded-lg text-xs max-w-[200px] shadow-lg">
+              ⚠️ Backend offline
             </div>
           )}
           
