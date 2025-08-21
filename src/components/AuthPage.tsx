@@ -729,8 +729,8 @@ const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
     
     if (!isAuthenticated) {
       if (showWelcomeText) {
-        // Initial position: Center view for easy house clicking
-        targetPosition.current.set(0, 4, 15);
+        // Initial position: Lower, closer view for more intimate feel
+        targetPosition.current.set(0, 2.5, 10);
         targetLookAt.current.set(0, 1, 0);
       } else {
         // B-roll camera movements with popup-centered end positions
@@ -1006,7 +1006,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
               
       {/* Main 3D Scene - Mobile Optimized */}
       <Canvas
-        camera={{ position: [0, 4, 15], fov: 70 }}
+        camera={{ position: [0, 2.5, 10], fov: 60 }}
         style={{ 
           width: '100%', 
           height: '100%', 
@@ -1016,7 +1016,9 @@ const AuthPage: React.FC<AuthPageProps> = () => {
         gl={{ 
           antialias: true, 
           alpha: false,
-          powerPreference: "high-performance"
+          powerPreference: "high-performance",
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.2
         }}
         dpr={[1, 2]}
         shadows
@@ -1411,13 +1413,13 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           
         </Suspense>
         
-        {/* Subtle Post-Processing */}
+                {/* Professional Post-Processing for Cinematic Quality */}
         <EffectComposer>
           <Bloom 
-            intensity={0.2} 
-            kernelSize={2} 
-            luminanceThreshold={1.2} 
-            luminanceSmoothing={0.3} 
+            intensity={0.15}
+            kernelSize={3}
+            luminanceThreshold={1.5}
+            luminanceSmoothing={0.4}
           />
         </EffectComposer>
       </Canvas>
