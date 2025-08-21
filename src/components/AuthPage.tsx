@@ -435,39 +435,39 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
       
       {/* Interior Lighting System */}
       <group>
-        {/* Main Interior Warm Glow */}
+        {/* Main Interior Warm Glow - More Diffused */}
         <mesh position={[0, 1.5, 1.8]}>
-          <sphereGeometry args={[2]} />
+          <sphereGeometry args={[3]} />
           <meshStandardMaterial 
             color="#ffa500"
             transparent
-            opacity={0.08}
+            opacity={0.04}
             emissive="#ffa500"
-            emissiveIntensity={0.2}
+            emissiveIntensity={0.1}
           />
         </mesh>
         
-        {/* Living Room Light Sources - Subtle */}
+        {/* Living Room Light Sources - More Diffused */}
         {[[-1.5, 1.5], [1.5, 1.5]].map(([x, z], index) => (
           <pointLight
             key={`interior-light-${index}`}
             position={[x, 2.5, z]}
             color="#fff8e1"
-            intensity={0.15}
-            distance={5}
-            decay={2}
+            intensity={0.08}
+            distance={8}
+            decay={2.5}
           />
         ))}
         
-        {/* Second Floor Bedroom Lights - Subtle */}
+        {/* Second Floor Bedroom Lights - More Diffused */}
         {[[-1, 4], [1, 4]].map(([x, y], index) => (
           <pointLight
             key={`bedroom-light-${index}`}
             position={[x, y, -1]}
             color="#fff3e0"
-            intensity={0.1}
-            distance={4}
-            decay={2}
+            intensity={0.05}
+            distance={6}
+            decay={2.5}
           />
         ))}
         
@@ -733,25 +733,15 @@ const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
         targetPosition.current.set(0, 3, 12);
         targetLookAt.current.set(0, 1, 0);
       } else {
-        // B-roll camera movements with different angles for login/signup forms (after house click)
+        // Optimized camera positioning for narrow iPhone screens
         if (mode === 'login') {
-          // Login: Camera on right side for left form placement
-          const angle = timeRef.current * 0.15; // Slow rotation
-          targetPosition.current.set(
-            6 + Math.sin(angle) * 2, // Orbit around house
-            3.5 + Math.cos(timeRef.current * 0.1) * 0.3, // Gentle vertical float
-            8 + Math.cos(angle) * 1.5
-          );
-          targetLookAt.current.set(-0.5, 1.2, 0); // Look toward house with offset for form
+          // Login: Position camera to show left form clearly on mobile
+          targetPosition.current.set(4, 3, 10); // Closer, more centered for mobile
+          targetLookAt.current.set(0, 1, 0); // Look at house center
         } else {
-          // Signup: Camera on left side for right form placement  
-          const angle = timeRef.current * 0.15; // Slow rotation
-          targetPosition.current.set(
-            -6 - Math.sin(angle) * 2, // Orbit around house (opposite direction)
-            3.5 + Math.cos(timeRef.current * 0.1) * 0.3, // Gentle vertical float
-            8 + Math.cos(angle) * 1.5
-          );
-          targetLookAt.current.set(0.5, 1.2, 0); // Look toward house with offset for form
+          // Signup: Position camera to show right form clearly on mobile
+          targetPosition.current.set(-4, 3, 10); // Closer, more centered for mobile
+          targetLookAt.current.set(0, 1, 0); // Look at house center
         }
       }
     }
@@ -772,7 +762,7 @@ const FloatingForm = ({ mode, position, onSubmit, formData, setFormData, isLoadi
   return (
     <Html position={position} center>
       <motion.div 
-        className="bg-white/20 backdrop-blur-2xl p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-2xl w-[280px] sm:min-w-[320px] border border-white/30 shadow-black/20"
+        className="bg-white/20 backdrop-blur-2xl p-3 sm:p-6 rounded-xl sm:rounded-3xl shadow-2xl w-[260px] sm:min-w-[320px] border border-white/30 shadow-black/20"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -1004,7 +994,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
               
       {/* Main 3D Scene - Mobile Optimized */}
       <Canvas
-        camera={{ position: [0, 3, 12], fov: 65 }}
+        camera={{ position: [0, 4, 15], fov: 70 }}
         style={{ 
           width: '100%', 
           height: '100%', 
@@ -1032,18 +1022,17 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           
           {/* Mouse Controls for 3D Navigation - House Centered */}
           <OrbitControls 
-            enablePan={true}
+            enablePan={false}
             enableZoom={true}
             enableRotate={true}
-            minDistance={8}
-            maxDistance={25}
-            minPolarAngle={Math.PI / 6}
-            maxPolarAngle={Math.PI / 2.2}
+            minDistance={10}
+            maxDistance={30}
+            minPolarAngle={Math.PI / 8}
+            maxPolarAngle={Math.PI / 2.5}
             autoRotate={false}
-            autoRotateSpeed={0.5}
             target={[0, 1, 0]}
             enableDamping={true}
-            dampingFactor={0.05}
+            dampingFactor={0.08}
           />
           
           {/* Realistic Sky Environment */}
@@ -1383,11 +1372,11 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           
 
           
-          {/* Form in 3D Space - Mobile Optimized with Camera Movement */}
+          {/* Form in 3D Space - iPhone Optimized Positioning */}
           {showForm && (
             <FloatingForm
               mode={mode}
-              position={mode === 'login' ? [-3, 2, 2] : [3, 2, 2]}
+              position={mode === 'login' ? [-2, 1.5, 4] : [2, 1.5, 4]}
               onSubmit={mode === 'login' ? handleLogin : handleRegister}
               formData={mode === 'login' ? loginForm : registerForm}
               setFormData={mode === 'login' ? setLoginForm : setRegisterForm}
