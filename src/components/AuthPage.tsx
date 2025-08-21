@@ -44,90 +44,259 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
   
   return (
     <group ref={houseRef} position={[0, 0, 0]}>
-      {/* Professional Foundation with Stone Texture */}
+      {/* Professional Foundation with Enhanced Stone Texture */}
       <mesh position={[0, 0.15, 0]} receiveShadow>
         <boxGeometry args={[6, 0.3, 6]} />
         <meshStandardMaterial 
-          color="#1a1a1a"
-          roughness={0.9}
+          color="#2c2c2c"
+          roughness={0.8}
+          metalness={0.05}
+        />
+      </mesh>
+      
+      {/* Foundation Trim */}
+      <mesh position={[0, 0.32, 0]} receiveShadow>
+        <boxGeometry args={[6.1, 0.04, 6.1]} />
+        <meshStandardMaterial 
+          color="#3a3a3a"
+          roughness={0.6}
           metalness={0.1}
         />
       </mesh>
       
-      {/* Main House Structure - Multi-level */}
+      {/* Main House Structure - Professional Concrete Wall */}
       <mesh position={[0, 1.8, 0]} castShadow receiveShadow>
         <boxGeometry args={[5, 3.2, 5]} />
         <meshStandardMaterial 
-          color="#f8f9fa"
-          roughness={0.3}
-          metalness={0.05}
+          color="#f4e4d5"
+          roughness={0.8}
+          metalness={0.0}
+          normalScale={[1.5, 1.5]}
         />
       </mesh>
       
-      {/* Second Floor */}
+      {/* Architectural Wall Details */}
+      {/* Horizontal Wall Trim Band */}
+      <mesh position={[0, 3.35, 2.51]} castShadow>
+        <boxGeometry args={[5.1, 0.12, 0.06]} />
+        <meshStandardMaterial 
+          color="#ffffff"
+          roughness={0.3}
+          metalness={0.0}
+        />
+      </mesh>
+      
+      {/* Vertical Corner Trim */}
+      {[[-2.5, 2.5], [2.5, 2.5], [-2.5, -2.5], [2.5, -2.5]].map(([x, z], index) => (
+        <mesh key={`corner-detail-${index}`} position={[x, 1.8, z]} castShadow>
+          <boxGeometry args={[0.1, 3.2, 0.1]} />
+          <meshStandardMaterial 
+            color="#e8e8e8"
+            roughness={0.4}
+            metalness={0.0}
+          />
+        </mesh>
+      ))}
+      
+      {/* Base Wall Trim */}
+      <mesh position={[0, 0.4, 2.51]} castShadow>
+        <boxGeometry args={[5.1, 0.08, 0.04]} />
+        <meshStandardMaterial 
+          color="#d0d0d0"
+          roughness={0.5}
+          metalness={0.0}
+        />
+      </mesh>
+      
+      {/* Second Floor - Rough Concrete Texture */}
       <mesh position={[0, 4.2, -1]} castShadow receiveShadow>
         <boxGeometry args={[3.5, 2, 3]} />
         <meshStandardMaterial 
-          color="#e9ecef"
-          roughness={0.4}
-          metalness={0.05}
+          color="#ddd9d5"
+          roughness={0.92}
+          metalness={0.0}
         />
       </mesh>
       
       {/* Complex Roof System */}
       <group>
-        {/* Main Roof */}
+        {/* Main Roof - Enhanced Shingle Material */}
         <mesh position={[0, 4.5, 0]} rotation={[0, Math.PI / 4, 0]} castShadow>
           <coneGeometry args={[4.2, 2.2, 4]} />
           <meshStandardMaterial 
-            color="#2c3e50"
-            roughness={0.7}
+            color="#2d3e52"
+            roughness={0.9}
+            metalness={0.1}
+          />
+        </mesh>
+        
+        {/* Second Floor Roof - Matching Material */}
+        <mesh position={[0, 5.8, -1]} rotation={[0, 0, 0]} castShadow>
+          <coneGeometry args={[2.8, 1.5, 4]} />
+          <meshStandardMaterial 
+            color="#374a60"
+            roughness={0.8}
+            metalness={0.15}
+          />
+        </mesh>
+        
+        {/* Professional Roof Details */}
+        {/* Roof Edge Trim - Border between roof and wall */}
+        <mesh position={[0, 3.45, 2.55]} castShadow>
+          <boxGeometry args={[5.1, 0.15, 0.08]} />
+          <meshStandardMaterial 
+            color="#ffffff"
+            roughness={0.3}
+            metalness={0.0}
+          />
+        </mesh>
+        <mesh position={[0, 3.45, -2.55]} castShadow>
+          <boxGeometry args={[5.1, 0.15, 0.08]} />
+          <meshStandardMaterial 
+            color="#ffffff"
+            roughness={0.3}
+            metalness={0.0}
+          />
+        </mesh>
+        <mesh position={[2.55, 3.45, 0]} castShadow>
+          <boxGeometry args={[0.08, 0.15, 5.1]} />
+          <meshStandardMaterial 
+            color="#ffffff"
+            roughness={0.3}
+            metalness={0.0}
+          />
+        </mesh>
+        <mesh position={[-2.55, 3.45, 0]} castShadow>
+          <boxGeometry args={[0.08, 0.15, 5.1]} />
+          <meshStandardMaterial 
+            color="#ffffff"
+            roughness={0.3}
+            metalness={0.0}
+          />
+        </mesh>
+        
+        {/* Roof Gutters */}
+        <mesh position={[0, 3.35, 2.6]} castShadow>
+          <boxGeometry args={[5.0, 0.08, 0.12]} />
+          <meshStandardMaterial 
+            color="#95a5a6"
+            roughness={0.2}
+            metalness={0.8}
+          />
+        </mesh>
+        <mesh position={[0, 3.35, -2.6]} castShadow>
+          <boxGeometry args={[5.0, 0.08, 0.12]} />
+          <meshStandardMaterial 
+            color="#95a5a6"
+            roughness={0.2}
+            metalness={0.8}
+          />
+        </mesh>
+        
+        {/* Roof Ridge Cap */}
+        <mesh position={[0, 5.7, 0]} rotation={[0, Math.PI / 4, 0]} castShadow>
+          <boxGeometry args={[0.15, 0.1, 4.5]} />
+          <meshStandardMaterial 
+            color="#1a252f"
+            roughness={0.6}
             metalness={0.3}
           />
         </mesh>
         
-        {/* Second Floor Roof */}
-        <mesh position={[0, 5.8, -1]} rotation={[0, 0, 0]} castShadow>
-          <coneGeometry args={[2.8, 1.5, 4]} />
-          <meshStandardMaterial 
-            color="#34495e"
-            roughness={0.6}
-            metalness={0.4}
-          />
-        </mesh>
+
         
-        {/* Roof Details */}
-        <mesh position={[0, 4.0, 0]} rotation={[0, Math.PI / 4, 0]}>
-          <torusGeometry args={[3.8, 0.08, 8, 16]} />
+        {/* Soffit Under Roof Overhang */}
+        <mesh position={[0, 3.3, 0]} rotation={[Math.PI, Math.PI / 4, 0]}>
+          <ringGeometry args={[3.8, 4.4, 4]} />
           <meshStandardMaterial 
-            color="#1a252f"
-            roughness={0.4}
-            metalness={0.6}
+            color="#f8f9fa"
+            roughness={0.3}
+            metalness={0.0}
+            side={THREE.DoubleSide}
           />
         </mesh>
       </group>
       
-      {/* Professional Door System */}
+      {/* Enhanced Professional Entryway */}
       <group position={[0, 0, 2.55]}>
-        {/* Door Frame with Arch */}
+        {/* Entryway Platform */}
+        <mesh position={[0, 0.05, 0.3]} receiveShadow>
+          <boxGeometry args={[3, 0.1, 1]} />
+          <meshStandardMaterial 
+            color="#34495e"
+            roughness={0.6}
+            metalness={0.1}
+          />
+        </mesh>
+        
+        {/* Door Frame - Rich Wood Finish */}
         <mesh position={[0, 1.2, 0]} castShadow>
           <boxGeometry args={[1.2, 2.6, 0.2]} />
           <meshStandardMaterial 
-            color="#8b4513"
-            roughness={0.6}
+            color="#8b5a2b"
+            roughness={0.4}
+            metalness={0.1}
+          />
+        </mesh>
+        
+        {/* Side Trim Panels */}
+        {[-0.7, 0.7].map((x, index) => (
+          <mesh key={`trim-${index}`} position={[x, 1.2, 0.05]} castShadow>
+            <boxGeometry args={[0.1, 2.6, 0.15]} />
+            <meshStandardMaterial 
+              color="#7a4f1e"
+              roughness={0.5}
+              metalness={0.05}
+            />
+          </mesh>
+        ))}
+        
+        {/* Entryway Steps */}
+        {[0.6, 0.3].map((z, index) => (
+          <mesh key={`step-${index}`} position={[0, -0.05 + index * 0.08, z]} receiveShadow>
+            <boxGeometry args={[3.2, 0.08, 0.3]} />
+            <meshStandardMaterial 
+              color="#2c3e50"
+              roughness={0.7}
+              metalness={0.1}
+            />
+          </mesh>
+        ))}
+        
+        {/* Entryway Side Planters */}
+        {[-1.8, 1.8].map((x, index) => (
+          <group key={`planter-${index}`} position={[x, 0.1, 0.5]}>
+            <mesh castShadow>
+              <cylinderGeometry args={[0.3, 0.25, 0.4]} />
+              <meshStandardMaterial 
+                color="#5d4037"
+                roughness={0.8}
+                metalness={0.0}
+              />
+            </mesh>
+            {/* Small decorative plants */}
+            <mesh position={[0, 0.3, 0]} castShadow>
+              <coneGeometry args={[0.08, 0.25, 8]} />
+              <meshStandardMaterial 
+                color="#2e7d32"
+                roughness={0.9}
+                metalness={0.0}
+              />
+            </mesh>
+          </group>
+        ))}
+        
+        {/* Door Threshold Detail */}
+        <mesh position={[0, -0.02, 0.15]} receiveShadow>
+          <boxGeometry args={[1.3, 0.04, 0.1]} />
+          <meshStandardMaterial 
+            color="#8b5a2b"
+            roughness={0.3}
             metalness={0.2}
           />
         </mesh>
         
-        {/* Arched Top */}
-        <mesh position={[0, 2.3, 0]} rotation={[0, 0, Math.PI/2]} castShadow>
-          <torusGeometry args={[0.6, 0.1, 8, 16, Math.PI]} />
-          <meshStandardMaterial 
-            color="#8b4513"
-            roughness={0.6}
-            metalness={0.2}
-          />
-        </mesh>
+
         
         {/* Professional Door with Panels */}
         <group 
@@ -138,9 +307,9 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
           <mesh castShadow>
             <boxGeometry args={[1, 2.4, 0.08]} />
             <meshStandardMaterial 
-              color="#654321"
-              roughness={0.4}
-              metalness={0.1}
+              color="#6b4423"
+              roughness={0.3}
+              metalness={0.05}
             />
           </mesh>
           
@@ -176,6 +345,31 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
               metalness={0.8}
             />
           </mesh>
+          
+          {/* Interior Door Details (visible when open) */}
+          {isDoorOpen && (
+            <group>
+              {/* Interior Door Frame */}
+              <mesh position={[0, 0, -0.05]}>
+                <boxGeometry args={[0.98, 2.35, 0.03]} />
+                <meshStandardMaterial 
+                  color="#f5f5f5"
+                  roughness={0.4}
+                  metalness={0.0}
+                />
+              </mesh>
+              
+              {/* Interior Door Trim */}
+              <mesh position={[0, 0, -0.08]}>
+                <boxGeometry args={[1.0, 2.37, 0.02]} />
+                <meshStandardMaterial 
+                  color="#e0e0e0"
+                  roughness={0.3}
+                  metalness={0.1}
+                />
+              </mesh>
+            </group>
+          )}
         </group>
       </group>
       
@@ -190,15 +384,17 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
               <meshStandardMaterial color="#2c3e50" roughness={0.4} metalness={0.3} />
             </mesh>
             
-            {/* Glass with Reflections */}
+            {/* Glass with Subtle Interior Light Reflection */}
             <mesh position={[0, 0, 0.06]}>
               <boxGeometry args={[1.1, 1.3, 0.02]} />
               <meshStandardMaterial 
-                color="#4299e1"
+                color="#e3f2fd"
                 transparent 
                 opacity={0.6}
                 roughness={0.1}
-                metalness={0.1}
+                metalness={0.3}
+                emissive="#fff8e1"
+                emissiveIntensity={0.02}
               />
             </mesh>
             
@@ -224,30 +420,59 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
             <mesh position={[0, 0, 0.06]}>
               <boxGeometry args={[0.7, 0.9, 0.02]} />
               <meshStandardMaterial 
-                color="#4299e1"
+                color="#e8f5e8"
                 transparent 
-                opacity={0.6}
+                opacity={0.5}
                 roughness={0.1}
-                metalness={0.1}
+                metalness={0.3}
+                emissive="#fff9c4"
+                emissiveIntensity={0.015}
               />
             </mesh>
           </group>
         ))}
       </group>
       
-      {/* Interior Warm Glow */}
-      {isDoorOpen && (
+      {/* Interior Lighting System */}
+      <group>
+        {/* Main Interior Warm Glow */}
         <mesh position={[0, 1.5, 1.8]}>
-          <sphereGeometry args={[1.5]} />
+          <sphereGeometry args={[2]} />
           <meshStandardMaterial 
             color="#ffa500"
             transparent
-            opacity={0.1}
+            opacity={0.08}
             emissive="#ffa500"
-            emissiveIntensity={0.3}
+            emissiveIntensity={0.2}
           />
         </mesh>
-      )}
+        
+        {/* Living Room Light Sources - Subtle */}
+        {[[-1.5, 1.5], [1.5, 1.5]].map(([x, z], index) => (
+          <pointLight
+            key={`interior-light-${index}`}
+            position={[x, 2.5, z]}
+            color="#fff8e1"
+            intensity={0.15}
+            distance={5}
+            decay={2}
+          />
+        ))}
+        
+        {/* Second Floor Bedroom Lights - Subtle */}
+        {[[-1, 4], [1, 4]].map(([x, y], index) => (
+          <pointLight
+            key={`bedroom-light-${index}`}
+            position={[x, y, -1]}
+            color="#fff3e0"
+            intensity={0.1}
+            distance={4}
+            decay={2}
+          />
+        ))}
+        
+
+      </group>
       
       {/* Architectural Details */}
       <group>
@@ -261,24 +486,34 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
           />
         </mesh>
         
-        {/* Classical Columns */}
+        {/* Enhanced Classical Columns with Visible Bases */}
         {[-1.2, 1.2].map((x, index) => (
           <group key={`column-${index}`} position={[x, 1.5, 3.5]}>
-            <mesh>
-              <cylinderGeometry args={[0.15, 0.15, 3]} />
+            {/* Column Base - Positioned at Ground Level */}
+            <mesh position={[0, -1.2, 0]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.28, 0.25, 0.4]} />
               <meshStandardMaterial 
-                color="#ecf0f1"
-                roughness={0.5}
+                color="#2c3e50"
+                roughness={0.8}
                 metalness={0.1}
               />
             </mesh>
-            {/* Column Capital */}
-            <mesh position={[0, 1.6, 0]}>
-              <cylinderGeometry args={[0.2, 0.15, 0.2]} />
+            {/* Column Shaft */}
+            <mesh castShadow receiveShadow>
+              <cylinderGeometry args={[0.15, 0.15, 3]} />
               <meshStandardMaterial 
-                color="#bdc3c7"
-                roughness={0.4}
-                metalness={0.2}
+                color="#f8f9fa"
+                roughness={0.7}
+                metalness={0.02}
+              />
+            </mesh>
+            {/* Column Capital */}
+            <mesh position={[0, 1.6, 0]} castShadow>
+              <cylinderGeometry args={[0.22, 0.15, 0.25]} />
+              <meshStandardMaterial 
+                color="#ecf0f1"
+                roughness={0.6}
+                metalness={0.05}
               />
             </mesh>
           </group>
@@ -823,9 +1058,9 @@ const AuthPage: React.FC<AuthPageProps> = () => {
             mieDirectionalG={0.8}
           />
           
-          {/* Realistic Ground with Subtle Details */}
+          {/* Enhanced Realistic Ground with Professional Details */}
           <group>
-            {/* Main Ground */}
+            {/* Main Ground - Improved Material */}
             <Plane 
               args={[50, 50]} 
               rotation={[-Math.PI / 2, 0, 0]} 
@@ -833,48 +1068,311 @@ const AuthPage: React.FC<AuthPageProps> = () => {
               receiveShadow
             >
               <meshStandardMaterial
-                color="#2d3436"
+                color="#3e4a4f"
+                roughness={0.85}
+                metalness={0.05}
+              />
+            </Plane>
+            
+            {/* Enhanced Grass Patches with Natural Variation */}
+            {Array.from({ length: 12 }, (_, i) => (
+              <Plane
+                key={`grass-${i}`}
+                args={[2.5 + Math.random() * 1.5, 2 + Math.random() * 1.5]}
+                rotation={[-Math.PI / 2, 0, Math.random() * Math.PI]}
+                position={[
+                  (Math.random() - 0.5) * 16,
+                  0.005,
+                  (Math.random() - 0.5) * 16
+                ]}
+                receiveShadow
+              >
+                <meshStandardMaterial
+                  color={i % 3 === 0 ? "#2d5a3d" : i % 3 === 1 ? "#357a49" : "#1e4a32"}
+                  roughness={0.9}
+                  metalness={0.0}
+                  transparent
+                  opacity={0.8}
+                />
+              </Plane>
+            ))}
+            
+            {/* Professional Cobblestone Pathway Base */}
+            <Plane
+              args={[2.5, 10]}
+              rotation={[-Math.PI / 2, 0, 0]}
+              position={[0, 0.01, 1]}
+              receiveShadow
+            >
+              <meshStandardMaterial
+                color="#2c2c2c"
                 roughness={0.9}
                 metalness={0.1}
               />
             </Plane>
             
-            {/* Grass Patches */}
-            {Array.from({ length: 8 }, (_, i) => (
-              <Plane
-                key={`grass-${i}`}
-                args={[3 + Math.random() * 2, 2 + Math.random() * 2]}
-                rotation={[-Math.PI / 2, 0, Math.random() * Math.PI]}
+            {/* Individual Cobblestones with Realistic Variation */}
+            {Array.from({ length: 60 }, (_, i) => {
+              const row = Math.floor(i / 10);
+              const col = i % 10;
+              const size = 0.18 + Math.random() * 0.08;
+              const height = 0.03 + Math.random() * 0.02;
+              return (
+                <mesh
+                  key={`cobblestone-${i}`}
+                  position={[
+                    (col - 4.5) * 0.25 + (Math.random() - 0.5) * 0.08,
+                    0.02 + height/2,
+                    (row - 2.5) * 0.5 + 1 + (Math.random() - 0.5) * 0.1
+                  ]}
+                  rotation={[0, Math.random() * Math.PI, 0]}
+                  castShadow
+                  receiveShadow
+                >
+                  <cylinderGeometry args={[size, size * 0.9, height, 6]} />
+                  <meshStandardMaterial
+                    color={
+                      i % 5 === 0 ? "#4a4a4a" : 
+                      i % 5 === 1 ? "#5a5a5a" : 
+                      i % 5 === 2 ? "#3a3a3a" : 
+                      i % 5 === 3 ? "#6a6a6a" : "#505050"
+                    }
+                    roughness={0.8 + Math.random() * 0.15}
+                    metalness={0.05 + Math.random() * 0.1}
+                  />
+                </mesh>
+              );
+            })}
+            
+            {/* Cobblestone Mortar/Grout Lines */}
+            {Array.from({ length: 15 }, (_, i) => (
+              <mesh
+                key={`mortar-${i}`}
                 position={[
-                  (Math.random() - 0.5) * 20,
-                  0.01,
-                  (Math.random() - 0.5) * 20
+                  (Math.random() - 0.5) * 2.3,
+                  0.005,
+                  (Math.random() - 0.5) * 9 + 1
                 ]}
+                rotation={[-Math.PI / 2, 0, Math.random() * Math.PI]}
                 receiveShadow
               >
+                <planeGeometry args={[0.15 + Math.random() * 0.1, 0.8 + Math.random() * 0.4]} />
                 <meshStandardMaterial
-                  color="#27ae60"
-                  roughness={0.8}
+                  color="#1a1a1a"
+                  roughness={0.95}
                   metalness={0.0}
-                  transparent
-                  opacity={0.7}
                 />
-              </Plane>
+              </mesh>
             ))}
             
-            {/* Pathway to House */}
-            <Plane
-              args={[2, 8]}
-              rotation={[-Math.PI / 2, 0, 0]}
-              position={[0, 0.02, 1]}
-              receiveShadow
-            >
-              <meshStandardMaterial
-                color="#636e72"
-                roughness={0.7}
-                metalness={0.0}
-              />
-            </Plane>
+            {/* Realistic Professional Garden Layout */}
+            {/* Garden Beds on Both Sides of Pathway */}
+            {[-3.5, 3.5].map((x, sideIndex) => (
+              <group key={`garden-side-${sideIndex}`}>
+                {/* Rich Soil Garden Bed with Texture */}
+                <mesh position={[x, 0.02, 2]} receiveShadow>
+                  <boxGeometry args={[2.2, 0.12, 6]} />
+                  <meshStandardMaterial
+                    color="#3d2914"
+                    roughness={0.95}
+                    metalness={0.0}
+                    normalScale={[0.8, 0.8]}
+                  />
+                </mesh>
+                
+                {/* Garden Border Edging */}
+                <mesh position={[x + (sideIndex === 0 ? 1.1 : -1.1), 0.08, 2]} receiveShadow>
+                  <boxGeometry args={[0.08, 0.16, 6]} />
+                  <meshStandardMaterial
+                    color="#5d4037"
+                    roughness={0.7}
+                    metalness={0.0}
+                  />
+                </mesh>
+                
+                {/* Realistic Natural Stones with Variation */}
+                {Array.from({ length: 4 }, (_, i) => {
+                  const stoneScale = 0.12 + Math.random() * 0.08;
+                  return (
+                    <mesh
+                      key={`natural-stone-${i}`}
+                      position={[
+                        x + (Math.random() - 0.5) * 1.8,
+                        0.06 + stoneScale/2,
+                        2 + (Math.random() - 0.5) * 5
+                      ]}
+                      rotation={[
+                        Math.random() * 0.3,
+                        Math.random() * Math.PI,
+                        Math.random() * 0.3
+                      ]}
+                      scale={[
+                        stoneScale,
+                        stoneScale * (0.7 + Math.random() * 0.6),
+                        stoneScale * (0.8 + Math.random() * 0.4)
+                      ]}
+                      receiveShadow
+                      castShadow
+                    >
+                      <dodecahedronGeometry args={[1]} />
+                      <meshStandardMaterial
+                        color={i % 4 === 0 ? "#8d8d8d" : i % 4 === 1 ? "#a8a8a8" : i % 4 === 2 ? "#707070" : "#9e9e9e"}
+                        roughness={0.9}
+                        metalness={0.0}
+                        normalScale={[1.2, 1.2]}
+                      />
+                    </mesh>
+                  );
+                })}
+                
+                {/* Professional Landscaping Bushes */}
+                {Array.from({ length: 3 }, (_, i) => {
+                  const bushSize = 0.35 + Math.random() * 0.25;
+                  const bushHeight = bushSize * (0.8 + Math.random() * 0.4);
+                  return (
+                    <group key={`professional-bush-${i}`} position={[
+                      x + (Math.random() - 0.5) * 1.6,
+                      0.05,
+                      2 + (Math.random() - 0.5) * 4
+                    ]}>
+                      {/* Main Bush Structure - Irregular Shape */}
+                      <mesh castShadow receiveShadow position={[0, bushHeight/2, 0]}>
+                        <sphereGeometry args={[bushSize, 16, 12]} />
+                        <meshStandardMaterial
+                          color="#1b5e20"
+                          roughness={0.9}
+                          metalness={0.0}
+                        />
+                      </mesh>
+                      
+                      {/* Organic Foliage Clusters */}
+                      {Array.from({ length: 8 }, (_, j) => {
+                        const clusterSize = bushSize * (0.2 + Math.random() * 0.3);
+                        return (
+                          <mesh
+                            key={`foliage-cluster-${j}`}
+                            position={[
+                              (Math.random() - 0.5) * bushSize * 1.8,
+                              (Math.random() - 0.2) * bushHeight * 1.2,
+                              (Math.random() - 0.5) * bushSize * 1.8
+                            ]}
+                            scale={[
+                              0.8 + Math.random() * 0.4,
+                              0.6 + Math.random() * 0.8,
+                              0.8 + Math.random() * 0.4
+                            ]}
+                            rotation={[
+                              Math.random() * 0.5,
+                              Math.random() * Math.PI * 2,
+                              Math.random() * 0.5
+                            ]}
+                            castShadow
+                          >
+                            <sphereGeometry args={[clusterSize, 10, 8]} />
+                            <meshStandardMaterial
+                              color={j % 4 === 0 ? "#2e7d32" : j % 4 === 1 ? "#43a047" : j % 4 === 2 ? "#4caf50" : "#388e3c"}
+                              roughness={0.95}
+                              metalness={0.0}
+                            />
+                          </mesh>
+                        );
+                      })}
+                      
+                      {/* Small Branch Details */}
+                      {Array.from({ length: 4 }, (_, k) => (
+                        <mesh
+                          key={`branch-${k}`}
+                          position={[
+                            (Math.random() - 0.5) * bushSize * 2,
+                            bushHeight * (0.3 + Math.random() * 0.7),
+                            (Math.random() - 0.5) * bushSize * 2
+                          ]}
+                          rotation={[
+                            Math.random() * Math.PI,
+                            Math.random() * Math.PI * 2,
+                            Math.random() * Math.PI
+                          ]}
+                          castShadow
+                        >
+                          <cylinderGeometry args={[0.008, 0.012, 0.1 + Math.random() * 0.08]} />
+                          <meshStandardMaterial
+                            color="#5d4037"
+                            roughness={0.9}
+                            metalness={0.0}
+                          />
+                        </mesh>
+                      ))}
+                    </group>
+                  );
+                })}
+                
+                {/* Realistic Flowers with Stems */}
+                {Array.from({ length: 6 }, (_, i) => (
+                  <group
+                    key={`flower-${i}`}
+                    position={[
+                      x + (Math.random() - 0.5) * 1.5,
+                      0.05,
+                      2 + (Math.random() - 0.5) * 4
+                    ]}
+                    rotation={[0, Math.random() * Math.PI * 2, 0]}
+                  >
+                    {/* Flower Stem */}
+                    <mesh position={[0, 0.1, 0]} castShadow>
+                      <cylinderGeometry args={[0.008, 0.008, 0.2]} />
+                      <meshStandardMaterial
+                        color="#2e7d32"
+                        roughness={0.8}
+                        metalness={0.0}
+                      />
+                    </mesh>
+                    
+                    {/* Flower Head */}
+                    <mesh position={[0, 0.2, 0]} castShadow>
+                      <sphereGeometry args={[0.03, 8, 6]} />
+                      <meshStandardMaterial
+                        color={i % 6 === 0 ? "#e91e63" : i % 6 === 1 ? "#ff9800" : i % 6 === 2 ? "#9c27b0" : i % 6 === 3 ? "#f44336" : i % 6 === 4 ? "#ff5722" : "#e53935"}
+                        roughness={0.6}
+                        metalness={0.0}
+                        emissive={i % 6 === 0 ? "#e91e63" : i % 6 === 1 ? "#ff9800" : i % 6 === 2 ? "#9c27b0" : i % 6 === 3 ? "#f44336" : i % 6 === 4 ? "#ff5722" : "#e53935"}
+                        emissiveIntensity={0.05}
+                      />
+                    </mesh>
+                    
+                    {/* Flower Petals */}
+                    {Array.from({ length: 6 }, (_, j) => (
+                      <mesh
+                        key={`petal-${j}`}
+                        position={[
+                          Math.cos((j / 6) * Math.PI * 2) * 0.025,
+                          0.2,
+                          Math.sin((j / 6) * Math.PI * 2) * 0.025
+                        ]}
+                        rotation={[0, (j / 6) * Math.PI * 2, Math.PI / 6]}
+                        castShadow
+                      >
+                        <boxGeometry args={[0.015, 0.04, 0.002]} />
+                        <meshStandardMaterial
+                          color={i % 6 === 0 ? "#f8bbd9" : i % 6 === 1 ? "#ffcc80" : i % 6 === 2 ? "#ce93d8" : i % 6 === 3 ? "#ffab91" : i % 6 === 4 ? "#ff8a65" : "#ef9a9a"}
+                          roughness={0.4}
+                          metalness={0.0}
+                        />
+                      </mesh>
+                    ))}
+                  </group>
+                ))}
+                
+                {/* Mulch Ground Cover */}
+                <mesh position={[x, 0.005, 2]} receiveShadow>
+                  <boxGeometry args={[2.1, 0.01, 5.8]} />
+                  <meshStandardMaterial
+                    color="#5d4037"
+                    roughness={0.9}
+                    metalness={0.0}
+                  />
+                </mesh>
+              </group>
+            ))}
           </group>
           
           {/* Interactive Professional House Model - Centered */}
@@ -883,16 +1381,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           </group>
 
           
-          {/* Static Text - House Focused */}
-          <Text
-            position={[0, 5, 0]}
-            fontSize={0.6}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-          >
-            {mode === 'login' ? 'ENTER HOME' : 'JOIN FAMILY'}
-          </Text>
+
           
           {/* Form in 3D Space - Mobile Optimized with Camera Movement */}
           {showForm && (
