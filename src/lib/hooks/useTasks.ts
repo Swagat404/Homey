@@ -27,8 +27,17 @@ export const useTasks = (params?: {
 }) => {
   return useQuery({
     queryKey: taskKeys.list(params),
-    queryFn: () => tasksApi.getTasks(params),
+    queryFn: () => {
+      console.log('🔧 useTasks queryFn called with params:', params);
+      return tasksApi.getTasks(params);
+    },
     staleTime: 1000 * 60 * 5, // 5 minutes
+    onError: (error) => {
+      console.error('🚨 useTasks error:', error);
+    },
+    onSuccess: (data) => {
+      console.log('✅ useTasks success:', data);
+    }
   });
 };
 

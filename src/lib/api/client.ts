@@ -7,12 +7,20 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 // API Configuration
 const API_CONFIG = {
   // Use ngrok public URL for mobile access, fallback to localhost for development
-  baseURL: import.meta.env.VITE_API_URL || 'https://76a27baf102a.ngrok-free.app/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://76a27baf102a.ngrok-free.app/api/v1' : 'http://localhost:8000/api/v1'),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 };
+
+// Debug logging for mobile troubleshooting
+console.log('🔧 API Config Debug:', {
+  'VITE_API_URL env var': import.meta.env.VITE_API_URL,
+  'Final baseURL': API_CONFIG.baseURL,
+  'Mode': import.meta.env.MODE,
+  'All env vars': import.meta.env
+});
 
 // Create axios instance
 const apiClient: AxiosInstance = axios.create(API_CONFIG);

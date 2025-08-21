@@ -27,8 +27,17 @@ export const useExpenses = (params?: {
 }) => {
   return useQuery({
     queryKey: expenseKeys.list(params),
-    queryFn: () => expensesApi.getExpenses(params),
+    queryFn: () => {
+      console.log('🔧 useExpenses queryFn called with params:', params);
+      return expensesApi.getExpenses(params);
+    },
     staleTime: 1000 * 60 * 5, // 5 minutes
+    onError: (error) => {
+      console.error('🚨 useExpenses error:', error);
+    },
+    onSuccess: (data) => {
+      console.log('✅ useExpenses success:', data);
+    }
   });
 };
 

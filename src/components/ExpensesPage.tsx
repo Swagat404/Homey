@@ -44,13 +44,24 @@ const ExpensesPage: React.FC<ExpensesPageProps> = ({ onBack }) => {
   const [highlightSection, setHighlightSection] = useState<string | null>(null);
   const [expandedExpenses, setExpandedExpenses] = useState<Set<string>>(new Set());
 
-  // API hooks
-  const { data: expensesResponse } = useExpenses({ page_size: 100 });
+  // API hooks with debug logging
+  const { data: expensesResponse, isLoading: expensesLoading, error: expensesError } = useExpenses({ page_size: 100 });
   // const { data: expenseStats } = useExpenseStats(); // Commented out until backend is fixed
   const createExpenseMutation = useCreateExpense();
   const updateExpenseMutation = useUpdateExpense();
 
   const expenses = expensesResponse?.data || [];
+
+  // Debug logging for mobile troubleshooting
+  React.useEffect(() => {
+    console.log('🔧 Expenses Debug:', {
+      'expensesResponse': expensesResponse,
+      'expenses count': expenses.length,
+      'isLoading': expensesLoading,
+      'error': expensesError,
+      'user': user
+    });
+  }, [expensesResponse, expenses, expensesLoading, expensesError, user]);
 
   // Form state for adding new expenses (using string for amount to handle input)
   const [formData, setFormData] = useState({

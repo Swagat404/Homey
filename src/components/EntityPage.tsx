@@ -44,8 +44,8 @@ const TasksPage: React.FC<TasksPageProps> = ({ onBack }) => {
   const [editFormData, setEditFormData] = useState<Partial<Task>>({});
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set());
 
-  // API hooks
-  const { data: tasksResponse } = useTasks({ page_size: 100 });
+  // API hooks with debug logging
+  const { data: tasksResponse, isLoading: tasksLoading, error: tasksError } = useTasks({ page_size: 100 });
   // const { data: taskStats } = useTaskStats();
   const createTaskMutation = useCreateTask();
   const updateTaskMutation = useUpdateTask();
@@ -53,6 +53,17 @@ const TasksPage: React.FC<TasksPageProps> = ({ onBack }) => {
   const toggleTaskMutation = useToggleTaskComplete();
 
   const tasks = tasksResponse?.data || [];
+
+  // Debug logging for mobile troubleshooting
+  React.useEffect(() => {
+    console.log('🔧 Tasks Debug:', {
+      'tasksResponse': tasksResponse,
+      'tasks count': tasks.length,
+      'isLoading': tasksLoading,
+      'error': tasksError,
+      'user': user
+    });
+  }, [tasksResponse, tasks, tasksLoading, tasksError, user]);
 
   // Form state for adding new tasks
   const [formData, setFormData] = useState({
@@ -477,7 +488,7 @@ const TasksPage: React.FC<TasksPageProps> = ({ onBack }) => {
           <div className="flex items-center justify-between px-2">
             <h3 className="text-lg font-bold text-gray-900 dark:text-white">
               Tasks ({filteredTasks.length})
-            </h3>
+              </h3>
             <div className="flex gap-2">
               <ModernIconButton icon={IconFilter} variant="ghost" size="sm" />
               <ModernIconButton icon={IconCalendar} variant="ghost" size="sm" />
@@ -487,7 +498,7 @@ const TasksPage: React.FC<TasksPageProps> = ({ onBack }) => {
           <div className="space-y-3">
             {filteredTasks.map((task) => (
               <MobilePillCard
-                key={task.id}
+                    key={task.id}
                 id={task.id}
                 title={task.title}
                 description={task.description}
@@ -526,38 +537,38 @@ const TasksPage: React.FC<TasksPageProps> = ({ onBack }) => {
                       <IconFlag className="w-4 h-4 text-yellow-500" />
                       <span className="text-sm text-gray-600 dark:text-gray-300">
                         {task.points || 0} points
-                      </span>
-                    </div>
-                    
-                    {task.recurring && task.recurring !== "none" && (
+                              </span>
+                              </div>
+
+                            {task.recurring && task.recurring !== "none" && (
                       <div className="flex items-center gap-2">
-                        <IconRepeat className="w-4 h-4 text-purple-500" />
+                                <IconRepeat className="w-4 h-4 text-purple-500" />
                         <span className="text-sm text-gray-600 dark:text-gray-300">
                           {task.recurring}
                         </span>
-                      </div>
-                    )}
-                  </div>
+                            </div>
+                            )}
+                          </div>
 
-                  {/* Completion Info */}
-                  {task.completed && task.completed_by_name && (
+                          {/* Completion Info */}
+                          {task.completed && task.completed_by_name && (
                     <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-700">
                       <div className="flex items-center gap-2">
                         <IconCheck className="w-4 h-4 text-green-600 dark:text-green-400" />
                         <span className="text-sm text-green-700 dark:text-green-300">
                           Completed by {task.completed_by_name}
                         </span>
-                      </div>
+                            </div>
                       <div className="text-xs text-green-600 dark:text-green-400 mt-1">
                         {new Date(task.completed_at!).toLocaleDateString()}
-                      </div>
-                    </div>
-                  )}
+                            </div>
+                          </div>
+                    )}
 
                   {/* Quick Edit Actions */}
                   <div className="flex gap-2 pt-2">
                     <motion.button
-                      onClick={() => startInlineEdit(task)}
+                            onClick={() => startInlineEdit(task)}
                       className="flex-1 px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-xl font-medium transition-colors"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -565,32 +576,32 @@ const TasksPage: React.FC<TasksPageProps> = ({ onBack }) => {
                       Quick Edit
                     </motion.button>
                     <motion.button
-                      onClick={() => handleDeleteTask(task.id)}
+                            onClick={() => handleDeleteTask(task.id)}
                       className="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-xl font-medium transition-colors"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       Delete
                     </motion.button>
-                  </div>
-                </div>
+                        </div>
+                    </div>
               </MobilePillCard>
             ))}
 
             {filteredTasks.length === 0 && (
               <div className="text-center py-12 mx-2">
                 <div className="bg-white/50 dark:bg-gray-800/50 rounded-3xl p-8 backdrop-blur-xl border border-white/20 dark:border-gray-700/50">
-                  <IconCheckbox className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <IconCheckbox className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h4 className="text-lg font-medium text-gray-500 dark:text-gray-400 mb-2">
-                    No tasks found
-                  </h4>
+                  No tasks found
+                </h4>
                   <p className="text-gray-400 text-sm">
-                    {searchTerm || filterStatus !== "all" || filterAssignee !== "all" || filterCategory !== "all"
-                      ? "Try adjusting your filters"
-                      : "Create your first task to get started"}
-                  </p>
+                  {searchTerm || filterStatus !== "all" || filterAssignee !== "all" || filterCategory !== "all"
+                    ? "Try adjusting your filters"
+                    : "Create your first task to get started"}
+                </p>
                 </div>
-              </div>
+                </div>
             )}
           </div>
         </div>
