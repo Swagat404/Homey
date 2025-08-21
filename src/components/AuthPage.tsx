@@ -705,14 +705,15 @@ const DynamicLighting: React.FC<{ timeOfDay: number }> = ({ timeOfDay }) => {
   );
 };
 
-// Enhanced Camera Controller with B-roll movements for mobile form positioning
+// Enhanced Camera Controller with B-roll movements then OrbitControls takeover
 const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
   const { camera } = useThree();
-  const targetPosition = useRef(new THREE.Vector3(0, 3, 12));
-  const currentPosition = useRef(new THREE.Vector3(0, 3, 12));
+  const targetPosition = useRef(new THREE.Vector3(0, 2.5, 10));
+  const currentPosition = useRef(new THREE.Vector3(0, 2.5, 10));
   const targetLookAt = useRef(new THREE.Vector3(0, 1, 0));
   const currentLookAt = useRef(new THREE.Vector3(0, 1, 0));
   const timeRef = useRef(0);
+  const movementCompleted = useRef(false);
 
   useEffect(() => {
     console.log('Camera mode changed:', mode, 'isAuthenticated:', isAuthenticated);
@@ -721,19 +722,31 @@ const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
       // Move camera inside house
       targetPosition.current.set(0, 1.5, 1);
       targetLookAt.current.set(0, 1, -1);
+      movementCompleted.current = false;
+    } else if (!showWelcomeText) {
+      // Reset movement when form appears
+      timeRef.current = 0;
+      movementCompleted.current = false;
     }
-  }, [mode, isAuthenticated]);
+  }, [mode, isAuthenticated, showWelcomeText]);
 
   useFrame((_, delta) => {
-    timeRef.current += delta;
-    
     if (!isAuthenticated) {
       if (showWelcomeText) {
         // Initial position: Lower, closer view for more intimate feel
         targetPosition.current.set(0, 2.5, 10);
         targetLookAt.current.set(0, 1, 0);
-      } else {
+        movementCompleted.current = false;
+      } else if (!movementCompleted.current) {
         // B-roll camera movements with popup-centered end positions
+        timeRef.current += delta;
+        
+        // Stop movement after 4 seconds to let OrbitControls take over
+        if (timeRef.current > 4) {
+          movementCompleted.current = true;
+          return; // Let OrbitControls handle from here
+        }
+        
         if (mode === 'login') {
           // Login: Camera orbits to right side, ends with left form centered
           const angle = timeRef.current * 0.15; // Slow rotation
@@ -742,7 +755,7 @@ const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
             3.5 + Math.cos(timeRef.current * 0.1) * 0.3, // Gentle vertical float
             8 + Math.cos(angle) * 1
           );
-          targetLookAt.current.set(-0.8, 1.2, 0); // Look toward left form position
+          targetLookAt.current.set(-0.2, 1.2, 0); // Look toward left form position
         } else {
           // Signup: Camera orbits to left side, ends with right form centered
           const angle = timeRef.current * 0.15; // Slow rotation
@@ -751,17 +764,18 @@ const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
             3.5 + Math.cos(timeRef.current * 0.1) * 0.3, // Gentle vertical float
             8 + Math.cos(angle) * 1
           );
-          targetLookAt.current.set(0.8, 1.2, 0); // Look toward right form position
+          targetLookAt.current.set(0.2, 1.2, 0); // Look toward right form position
         }
+        
+        // Smooth camera movement with cinematic feel
+        currentPosition.current.lerp(targetPosition.current, delta * 1.2);
+        currentLookAt.current.lerp(targetLookAt.current, delta * 1.2);
+        
+        camera.position.copy(currentPosition.current);
+        camera.lookAt(currentLookAt.current);
       }
+      // After 4 seconds, OrbitControls takes over completely
     }
-
-    // Smooth camera movement with cinematic feel
-    currentPosition.current.lerp(targetPosition.current, delta * 1.2);
-    currentLookAt.current.lerp(targetLookAt.current, delta * 1.2);
-    
-    camera.position.copy(currentPosition.current);
-    camera.lookAt(currentLookAt.current);
   });
 
   return null;
@@ -1441,9 +1455,9 @@ const AuthPage: React.FC<AuthPageProps> = () => {
               <span className="text-xl font-semibold text-white">
                 {mode === 'login' ? 'Entering home...' : 'Joining family...'}
               </span>
-                </div>
+          </div>
           </motion.div>
-              </div>
+      </div>
       )}
       
     </div>
