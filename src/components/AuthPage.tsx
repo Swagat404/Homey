@@ -12,13 +12,11 @@ import {
   ContactShadows,
   Html,
   Sky,
-  OrbitControls,
-  MeshReflectorMaterial
+  OrbitControls
 } from '@react-three/drei';
 import { 
   EffectComposer, 
-  Bloom,
-  DepthOfField
+  Bloom
 } from '@react-three/postprocessing';
 import { motion } from 'framer-motion';
 import chroma from 'chroma-js';
@@ -42,8 +40,6 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
     "#008CFF", "#FF7ECC", "#FFC5B8", "#FFEBB8", 
     "#ffffff", "#FFC5B8", "#FF7ECC", "#008CFF"
   ]).domain([0, 0.15, 0.21, 0.27, 0.7, 0.75, 0.81, 1]);
-  
-  const currentLightColor = sunColors(timeOfDay).toString();
   
   return (
     <group ref={houseRef} position={[0, 0, 0]}>
@@ -333,7 +329,7 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
         ))}
         
         {/* Side Garden Bushes */}
-        {[[-3, 0, 1], [3, 0, 1], [-3, 0, -2], [3, 0, -2]].map(([x, y, z], index) => (
+        {[[-3, 0, 1], [3, 0, 1], [-3, 0, -2], [3, 0, -2]].map(([x, , z], index) => (
           <mesh key={`bush-${index}`} position={[x, 0.3, z]} castShadow>
             <sphereGeometry args={[0.4, 8, 6]} />
             <meshStandardMaterial 
@@ -650,6 +646,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
   };
 
   const handleHouseClick = () => {
+    console.log('House clicked, current mode:', mode);
     if (mode === 'login') {
       setIsDoorOpen(true);
       setShowForm(true);
@@ -659,47 +656,65 @@ const AuthPage: React.FC<AuthPageProps> = () => {
   };
 
   return (
-    <div className="w-full h-screen relative overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+    <div className="w-full h-screen relative overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900" style={{ touchAction: 'pan-x pan-y' }}>
       
                   {/* Enhanced Glassmorphic Mode Switch UI */}
-      <div className="absolute top-6 right-6 z-50 flex gap-3">
+      <div className="absolute top-4 right-4 z-[9999] flex gap-2 pointer-events-auto" style={{ isolation: 'isolate', pointerEvents: 'auto' }}>
         <motion.button
-          onClick={() => setMode('login')}
-          className={`px-8 py-3 rounded-3xl font-semibold transition-all backdrop-blur-2xl border shadow-xl ${
+          onClick={() => {
+            console.log('Enter Home button clicked');
+            setMode('login');
+            setShowForm(true);
+          }}
+          onTouchStart={() => {
+            console.log('Enter Home button touched');
+          }}
+          className={`px-4 py-2 rounded-2xl text-sm font-semibold transition-all backdrop-blur-2xl border shadow-xl pointer-events-auto ${
             mode === 'login'
               ? 'bg-gradient-to-r from-emerald-500/30 to-teal-500/30 text-white border-emerald-400/50 shadow-emerald-500/20' 
               : 'bg-white/10 text-white/90 border-white/20 hover:bg-emerald-500/20 hover:border-emerald-400/40'
           }`}
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
+          style={{ touchAction: 'manipulation' }}
         >
           <span className="font-bold tracking-wide">Enter Home</span>
         </motion.button>
         <motion.button
-          onClick={() => setMode('signup')}
-          className={`px-8 py-3 rounded-3xl font-semibold transition-all backdrop-blur-2xl border shadow-xl ${
+          onClick={() => {
+            console.log('Join Home button clicked');
+            setMode('signup');
+            setShowForm(true);
+          }}
+          onTouchStart={() => {
+            console.log('Join Home button touched');
+          }}
+          className={`px-4 py-2 rounded-2xl text-sm font-semibold transition-all backdrop-blur-2xl border shadow-xl pointer-events-auto ${
             mode === 'signup'
               ? 'bg-gradient-to-r from-violet-500/30 to-purple-500/30 text-white border-violet-400/50 shadow-violet-500/20'
               : 'bg-white/10 text-white/90 border-white/20 hover:bg-violet-500/20 hover:border-violet-400/40'
           }`}
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
+          style={{ touchAction: 'manipulation' }}
         >
           <span className="font-bold tracking-wide">Join Home</span>
         </motion.button>
           </div>
 
+
+
             {/* Enhanced Glassmorphic Welcome Header */}
-      <div className="absolute top-6 left-6 z-50">
+                    <div className="absolute top-4 left-4 right-4 z-50">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-emerald-500/20 to-teal-500/20 backdrop-blur-2xl border border-emerald-400/40 rounded-3xl px-8 py-5 shadow-2xl shadow-emerald-500/10"
+          className="bg-gradient-to-r from-emerald-500/20 to-teal-500/20 backdrop-blur-2xl border border-emerald-400/40 rounded-2xl px-4 py-3 shadow-2xl shadow-emerald-500/10 max-w-xs"
         >
-          <h1 className="text-white text-xl font-bold mb-2">
+          <h1 className="text-white text-lg font-bold mb-1">
             {mode === 'login' ? 'Welcome Back!' : 'Join Our Family!'}
           </h1>
-          <p className="text-emerald-100 text-sm font-medium">
+          <p className="text-emerald-100 text-xs font-medium">
             {mode === 'login' ? 'Click the house to enter your home' : 'Click the house to start your journey'}
           </p>
         </motion.div>
@@ -707,8 +722,13 @@ const AuthPage: React.FC<AuthPageProps> = () => {
               
       {/* Main 3D Scene - Mobile Optimized */}
       <Canvas
-        camera={{ position: [0, 4, 12], fov: 60 }}
-        style={{ width: '100%', height: '100%' }}
+        camera={{ position: [0, 3, 12], fov: 65 }}
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          pointerEvents: 'auto',
+          zIndex: 1
+        }}
         gl={{ 
           antialias: true, 
           alpha: false,
@@ -716,6 +736,9 @@ const AuthPage: React.FC<AuthPageProps> = () => {
         }}
         dpr={[1, 2]}
         shadows
+        onPointerMissed={() => {
+          // This ensures Canvas doesn't interfere with UI elements
+        }}
       >
         <Suspense fallback={
           <Html center>
@@ -725,7 +748,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           {/* Professional Dynamic Lighting System */}
           <DynamicLighting timeOfDay={0.6} />
           
-          {/* Mouse Controls for 3D Navigation */}
+          {/* Mouse Controls for 3D Navigation - House Centered */}
           <OrbitControls 
             enablePan={true}
             enableZoom={true}
@@ -736,6 +759,9 @@ const AuthPage: React.FC<AuthPageProps> = () => {
             maxPolarAngle={Math.PI / 2.2}
             autoRotate={false}
             autoRotateSpeed={0.5}
+            target={[0, 1, 0]}
+            enableDamping={true}
+            dampingFactor={0.05}
           />
           
           {/* Realistic Sky Environment */}
@@ -804,16 +830,16 @@ const AuthPage: React.FC<AuthPageProps> = () => {
             </Plane>
           </group>
           
-          {/* Interactive Professional House Model */}
-          <group onClick={handleHouseClick} scale={1} position={[0, 0, 0]}>
+          {/* Interactive Professional House Model - Centered */}
+          <group onClick={handleHouseClick} scale={0.8} position={[0, -0.5, 0]}>
             <ProfessionalHouseModel isDoorOpen={isDoorOpen} timeOfDay={0.6} />
           </group>
 
           
-          {/* Static Text - Mobile Optimized */}
+          {/* Static Text - House Focused */}
           <Text
-            position={[0, 4, 0]}
-            fontSize={0.7}
+            position={[0, 5, 0]}
+            fontSize={0.6}
             color="white"
             anchorX="center"
             anchorY="middle"
@@ -825,7 +851,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           {showForm && (
             <FloatingForm
               mode={mode}
-              position={mode === 'login' ? [2.5, 1.5, 2] : [-2.5, 1.5, 2]}
+              position={mode === 'login' ? [2.5, 1.5, 3] : [-2.5, 1.5, 3]}
               onSubmit={mode === 'login' ? handleLogin : handleRegister}
               formData={mode === 'login' ? loginForm : registerForm}
               setFormData={mode === 'login' ? setLoginForm : setRegisterForm}
