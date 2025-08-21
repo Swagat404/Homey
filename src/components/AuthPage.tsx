@@ -197,12 +197,11 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
             <mesh position={[0, 0, 0.06]}>
               <boxGeometry args={[1.1, 1.3, 0.02]} />
               <meshStandardMaterial 
-                color={currentLightColor}
+                color="#4299e1"
                 transparent 
-                opacity={0.3}
-                roughness={0.05}
+                opacity={0.6}
+                roughness={0.1}
                 metalness={0.1}
-                envMapIntensity={1.5}
               />
             </mesh>
             
@@ -228,10 +227,10 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
             <mesh position={[0, 0, 0.06]}>
               <boxGeometry args={[0.7, 0.9, 0.02]} />
               <meshStandardMaterial 
-                color={currentLightColor}
+                color="#4299e1"
                 transparent 
-                opacity={0.3}
-                roughness={0.05}
+                opacity={0.6}
+                roughness={0.1}
                 metalness={0.1}
               />
             </mesh>
@@ -307,6 +306,77 @@ const ProfessionalHouseModel = ({ isDoorOpen, timeOfDay = 0.5 }: any) => {
             metalness={0.7}
           />
         </mesh>
+        
+        {/* Garden Landscaping */}
+        {/* Flower Boxes under Windows */}
+        {[[-1.8, 2.55], [1.8, 2.55]].map(([x, z], index) => (
+          <group key={`flowerbox-${index}`} position={[x, 0.8, z]}>
+            <mesh>
+              <boxGeometry args={[1.3, 0.2, 0.3]} />
+              <meshStandardMaterial 
+                color="#8b4513"
+                roughness={0.8}
+                metalness={0.1}
+              />
+            </mesh>
+            {/* Flowers */}
+            {Array.from({ length: 3 }, (_, i) => (
+              <mesh key={i} position={[(i - 1) * 0.3, 0.15, 0]}>
+                <sphereGeometry args={[0.05]} />
+                <meshStandardMaterial 
+                  color={["#e74c3c", "#f39c12", "#9b59b6"][i]}
+                  roughness={0.6}
+                />
+              </mesh>
+            ))}
+          </group>
+        ))}
+        
+        {/* Side Garden Bushes */}
+        {[[-3, 0, 1], [3, 0, 1], [-3, 0, -2], [3, 0, -2]].map(([x, y, z], index) => (
+          <mesh key={`bush-${index}`} position={[x, 0.3, z]} castShadow>
+            <sphereGeometry args={[0.4, 8, 6]} />
+            <meshStandardMaterial 
+              color="#2d5016"
+              roughness={0.9}
+              metalness={0.0}
+            />
+          </mesh>
+        ))}
+        
+        {/* Roof Gutters */}
+        <group>
+          <mesh position={[0, 3.4, 2.5]} rotation={[0, 0, 0]}>
+            <boxGeometry args={[5.2, 0.1, 0.15]} />
+            <meshStandardMaterial 
+              color="#95a5a6"
+              roughness={0.2}
+              metalness={0.8}
+            />
+          </mesh>
+          <mesh position={[0, 3.4, -2.5]} rotation={[0, 0, 0]}>
+            <boxGeometry args={[5.2, 0.1, 0.15]} />
+            <meshStandardMaterial 
+              color="#95a5a6"
+              roughness={0.2}
+              metalness={0.8}
+            />
+          </mesh>
+        </group>
+        
+        {/* Window Trim Details */}
+        {[[-1.8, 1.5, 2.56], [1.8, 1.5, 2.56]].map(([x, y, z], index) => (
+          <group key={`trim-${index}`} position={[x, y, z]}>
+            <mesh>
+              <boxGeometry args={[1.3, 1.5, 0.05]} />
+              <meshStandardMaterial 
+                color="#ecf0f1"
+                roughness={0.4}
+                metalness={0.1}
+              />
+            </mesh>
+          </group>
+        ))}
       </group>
     </group>
   );
@@ -340,17 +410,17 @@ const DynamicLighting: React.FC<{ timeOfDay: number }> = ({ timeOfDay }) => {
     return lerp(scale[low], scale[high], rescale(value, [low / count, high / count], [0, 1]));
   };
   
-  // Sun and moon intensity calculations
+  // Reduced and more realistic lighting intensities
   const sunBrightness = interpolate([
-    0, 0, 0, 0, 0.5, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.5, 0.5, 0.5, 0.5, 0.5, 0, 0, 0
+    0, 0, 0, 0, 0.3, 0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.3, 0.3, 0.3, 0.3, 0.3, 0, 0, 0
   ], timeOfDay);
   
   const moonBrightness = interpolate([
-    1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2, 0.5, 1, 1
+    0.4, 0.4, 0.4, 0.4, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1, 0.2, 0.4, 0.4
   ], timeOfDay);
   
   const skyBrightness = interpolate([
-    0.1, 0.1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.1
+    0.05, 0.05, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.05
   ], timeOfDay);
   
   // Sun rotation for realistic day cycle
@@ -397,9 +467,8 @@ const DynamicLighting: React.FC<{ timeOfDay: number }> = ({ timeOfDay }) => {
         />
       </group>
       
-      {/* Atmospheric point lights */}
-      <pointLight position={[5, 8, 5]} intensity={0.3} color="#fbbf24" />
-      <pointLight position={[-5, 6, -3]} intensity={0.2} color="#8b5cf6" />
+      {/* Subtle fill light only */}
+      <pointLight position={[0, 8, 8]} intensity={0.1} color="#ffffff" />
     </>
   );
 };
@@ -669,34 +738,71 @@ const AuthPage: React.FC<AuthPageProps> = () => {
             autoRotateSpeed={0.5}
           />
           
-          {/* Glassmorphic Environment */}
+          {/* Realistic Sky Environment */}
           <Sky 
             distance={450000}
             sunPosition={[10, 20, 10]}
             inclination={0}
             azimuth={0.25}
-            turbidity={2}
-            rayleigh={1}
+            turbidity={8}
+            rayleigh={0.5}
+            mieCoefficient={0.02}
+            mieDirectionalG={0.8}
           />
           
-          {/* Professional Reflective Ground */}
-          <Plane 
-            args={[50, 50]} 
-            rotation={[-Math.PI / 2, 0, 0]} 
-            position={[0, 0, 0]}
-            receiveShadow
-          >
-            <MeshReflectorMaterial
-              color="#1a1a1a"
-              roughness={0.7}
-              metalness={0.2}
-              mirror={0.3}
-              mixBlur={0.8}
-              mixStrength={0.4}
-              resolution={512}
-              distortion={0.1}
-            />
-          </Plane>
+          {/* Realistic Ground with Subtle Details */}
+          <group>
+            {/* Main Ground */}
+            <Plane 
+              args={[50, 50]} 
+              rotation={[-Math.PI / 2, 0, 0]} 
+              position={[0, 0, 0]}
+              receiveShadow
+            >
+              <meshStandardMaterial
+                color="#2d3436"
+                roughness={0.9}
+                metalness={0.1}
+              />
+            </Plane>
+            
+            {/* Grass Patches */}
+            {Array.from({ length: 8 }, (_, i) => (
+              <Plane
+                key={`grass-${i}`}
+                args={[3 + Math.random() * 2, 2 + Math.random() * 2]}
+                rotation={[-Math.PI / 2, 0, Math.random() * Math.PI]}
+                position={[
+                  (Math.random() - 0.5) * 20,
+                  0.01,
+                  (Math.random() - 0.5) * 20
+                ]}
+                receiveShadow
+              >
+                <meshStandardMaterial
+                  color="#27ae60"
+                  roughness={0.8}
+                  metalness={0.0}
+                  transparent
+                  opacity={0.7}
+                />
+              </Plane>
+            ))}
+            
+            {/* Pathway to House */}
+            <Plane
+              args={[2, 8]}
+              rotation={[-Math.PI / 2, 0, 0]}
+              position={[0, 0.02, 1]}
+              receiveShadow
+            >
+              <meshStandardMaterial
+                color="#636e72"
+                roughness={0.7}
+                metalness={0.0}
+              />
+            </Plane>
+          </group>
           
           {/* Interactive Professional House Model */}
           <group onClick={handleHouseClick} scale={1} position={[0, 0, 0]}>
@@ -742,18 +848,13 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           
         </Suspense>
         
-        {/* Sharp HD Post-Processing */}
+        {/* Subtle Post-Processing */}
         <EffectComposer>
           <Bloom 
-            intensity={0.6} 
-            kernelSize={3} 
-            luminanceThreshold={0.8} 
-            luminanceSmoothing={0.2} 
-          />
-          <DepthOfField 
-            focusDistance={0.02}
-            focalLength={0.05}
-            bokehScale={1}
+            intensity={0.2} 
+            kernelSize={2} 
+            luminanceThreshold={1.2} 
+            luminanceSmoothing={0.3} 
           />
         </EffectComposer>
       </Canvas>
