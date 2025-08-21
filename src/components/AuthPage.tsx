@@ -772,7 +772,7 @@ const FloatingForm = ({ mode, position, onSubmit, formData, setFormData, isLoadi
   return (
     <Html position={position} center>
       <motion.div 
-        className="bg-white/20 backdrop-blur-2xl p-3 sm:p-6 rounded-xl sm:rounded-3xl shadow-2xl w-[260px] sm:min-w-[320px] border border-white/30 shadow-black/20"
+        className="bg-white/20 backdrop-blur-2xl p-3 sm:p-6 rounded-xl sm:rounded-3xl shadow-2xl w-[240px] sm:w-[280px] border border-white/30 shadow-black/20"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -925,8 +925,9 @@ const AuthPage: React.FC<AuthPageProps> = () => {
   return (
     <div className="auth-page-container w-full h-screen relative overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900" style={{ touchAction: 'pan-x pan-y' }}>
       
-                  {/* Enhanced Glassmorphic Mode Switch UI */}
-      <div className="absolute top-4 right-4 z-[9999] flex gap-2 pointer-events-auto" style={{ isolation: 'isolate', pointerEvents: 'auto' }}>
+                  {/* Enhanced Glassmorphic Mode Switch UI - Only show after house click */}
+      {!showWelcomeText && (
+        <div className="absolute top-4 right-4 z-[9999] flex gap-2 pointer-events-auto" style={{ isolation: 'isolate', pointerEvents: 'auto' }}>
         <motion.button
           onClick={() => {
             console.log('Enter Home button clicked');
@@ -968,6 +969,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           <span className="font-bold tracking-wide">Join Home</span>
         </motion.button>
           </div>
+      )}
 
 
 
@@ -1382,11 +1384,11 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           
 
           
-          {/* Form in 3D Space - Centered for Rotation View */}
+          {/* Form in 3D Space - Close to House Center */}
           {showForm && (
             <FloatingForm
               mode={mode}
-              position={mode === 'login' ? [-2.5, 1.8, 3] : [2.5, 1.8, 3]}
+              position={mode === 'login' ? [-1.2, 1.8, 3] : [1.2, 1.8, 3]}
               onSubmit={mode === 'login' ? handleLogin : handleRegister}
               formData={mode === 'login' ? loginForm : registerForm}
               setFormData={mode === 'login' ? setLoginForm : setRegisterForm}
