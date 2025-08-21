@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { AnimatePresence } from 'framer-motion';
 import { 
   Text, 
   Plane, 
@@ -469,11 +470,14 @@ const DynamicLighting: React.FC<{ timeOfDay: number }> = ({ timeOfDay }) => {
   );
 };
 
-// Camera Controller for Scene Transitions - Mobile Optimized
-const CameraController = ({ mode, isAuthenticated }: any) => {
+// Enhanced Camera Controller with B-roll movements for mobile form positioning
+const CameraController = ({ mode, isAuthenticated, showWelcomeText }: any) => {
   const { camera } = useThree();
-  const targetPosition = useRef(new THREE.Vector3(0, 2, 8));
+  const targetPosition = useRef(new THREE.Vector3(0, 3, 12));
+  const currentPosition = useRef(new THREE.Vector3(0, 3, 12));
   const targetLookAt = useRef(new THREE.Vector3(0, 1, 0));
+  const currentLookAt = useRef(new THREE.Vector3(0, 1, 0));
+  const timeRef = useRef(0);
 
   useEffect(() => {
     console.log('Camera mode changed:', mode, 'isAuthenticated:', isAuthenticated);
@@ -482,21 +486,47 @@ const CameraController = ({ mode, isAuthenticated }: any) => {
       // Move camera inside house
       targetPosition.current.set(0, 1.5, 1);
       targetLookAt.current.set(0, 1, -1);
-    } else if (mode === 'login') {
-      // Focus on door - mobile optimized
-      targetPosition.current.set(0, 2, 8);
-      targetLookAt.current.set(0, 1, 0);
-    } else {
-      // Signup - angled view for mobile
-      targetPosition.current.set(-3, 3, 6);
-      targetLookAt.current.set(0, 1, 0);
     }
   }, [mode, isAuthenticated]);
 
-  useFrame(() => {
-    // Smooth camera movement optimized for mobile
-    camera.position.lerp(targetPosition.current, 0.05);
-    camera.lookAt(targetLookAt.current);
+  useFrame((_, delta) => {
+    timeRef.current += delta;
+    
+    if (!isAuthenticated) {
+      if (showWelcomeText) {
+        // Initial position: Center view for easy house clicking
+        targetPosition.current.set(0, 3, 12);
+        targetLookAt.current.set(0, 1, 0);
+      } else {
+        // B-roll camera movements with different angles for login/signup forms (after house click)
+        if (mode === 'login') {
+          // Login: Camera on right side for left form placement
+          const angle = timeRef.current * 0.15; // Slow rotation
+          targetPosition.current.set(
+            6 + Math.sin(angle) * 2, // Orbit around house
+            3.5 + Math.cos(timeRef.current * 0.1) * 0.3, // Gentle vertical float
+            8 + Math.cos(angle) * 1.5
+          );
+          targetLookAt.current.set(-0.5, 1.2, 0); // Look toward house with offset for form
+        } else {
+          // Signup: Camera on left side for right form placement  
+          const angle = timeRef.current * 0.15; // Slow rotation
+          targetPosition.current.set(
+            -6 - Math.sin(angle) * 2, // Orbit around house (opposite direction)
+            3.5 + Math.cos(timeRef.current * 0.1) * 0.3, // Gentle vertical float
+            8 + Math.cos(angle) * 1.5
+          );
+          targetLookAt.current.set(0.5, 1.2, 0); // Look toward house with offset for form
+        }
+      }
+    }
+
+    // Smooth camera movement with cinematic feel
+    currentPosition.current.lerp(targetPosition.current, delta * 1.2);
+    currentLookAt.current.lerp(targetLookAt.current, delta * 1.2);
+    
+    camera.position.copy(currentPosition.current);
+    camera.lookAt(currentLookAt.current);
   });
 
   return null;
@@ -507,7 +537,7 @@ const FloatingForm = ({ mode, position, onSubmit, formData, setFormData, isLoadi
   return (
     <Html position={position} center>
       <motion.div 
-        className="bg-white/20 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl min-w-[320px] border border-white/30 shadow-black/20"
+        className="bg-white/20 backdrop-blur-2xl p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-2xl w-[280px] sm:min-w-[320px] border border-white/30 shadow-black/20"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -590,6 +620,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDoorOpen, setIsDoorOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [showWelcomeText, setShowWelcomeText] = useState(true);
   const { login, register, isAuthenticated } = useAuth();
 
   console.log('AuthPage render:', { mode, isDoorOpen, showForm, isAuthenticated });
@@ -647,6 +678,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
 
   const handleHouseClick = () => {
     console.log('House clicked, current mode:', mode);
+    setShowWelcomeText(false); // Hide welcome text after first click
     if (mode === 'login') {
       setIsDoorOpen(true);
       setShowForm(true);
@@ -704,21 +736,36 @@ const AuthPage: React.FC<AuthPageProps> = () => {
 
 
 
-            {/* Enhanced Glassmorphic Welcome Header */}
-                    <div className="absolute top-4 left-4 right-4 z-50">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-emerald-500/20 to-teal-500/20 backdrop-blur-2xl border border-emerald-400/40 rounded-2xl px-4 py-3 shadow-2xl shadow-emerald-500/10 max-w-xs"
-        >
-          <h1 className="text-white text-lg font-bold mb-1">
-            {mode === 'login' ? 'Welcome Back!' : 'Join Our Family!'}
-          </h1>
-          <p className="text-emerald-100 text-xs font-medium">
-            {mode === 'login' ? 'Click the house to enter your home' : 'Click the house to start your journey'}
-          </p>
-        </motion.div>
+            {/* Transparent Welcome Text Overlay - Disappears after click */}
+            <AnimatePresence>
+              {showWelcomeText && (
+                <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.5 } }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="text-center"
+                  >
+                    <motion.h1 
+                      className="text-white text-2xl sm:text-3xl font-bold mb-2 drop-shadow-2xl"
+                      animate={{ y: [0, -10, 0] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      {mode === 'login' ? 'Welcome Back!' : 'Join Our Family!'}
+                    </motion.h1>
+                    <motion.p 
+                      className="text-white/90 text-sm sm:text-base font-medium drop-shadow-xl"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5, duration: 0.8 }}
+                    >
+                      {mode === 'login' ? 'Click the house to enter your home' : 'Click the house to start your journey'}
+                    </motion.p>
+                  </motion.div>
               </div>
+              )}
+            </AnimatePresence>
               
       {/* Main 3D Scene - Mobile Optimized */}
       <Canvas
@@ -847,11 +894,11 @@ const AuthPage: React.FC<AuthPageProps> = () => {
             {mode === 'login' ? 'ENTER HOME' : 'JOIN FAMILY'}
           </Text>
           
-          {/* Form in 3D Space - Mobile Positioned */}
+          {/* Form in 3D Space - Mobile Optimized with Camera Movement */}
           {showForm && (
             <FloatingForm
               mode={mode}
-              position={mode === 'login' ? [2.5, 1.5, 3] : [-2.5, 1.5, 3]}
+              position={mode === 'login' ? [-3, 2, 2] : [3, 2, 2]}
               onSubmit={mode === 'login' ? handleLogin : handleRegister}
               formData={mode === 'login' ? loginForm : registerForm}
               setFormData={mode === 'login' ? setLoginForm : setRegisterForm}
@@ -860,7 +907,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           )}
           
           {/* Camera Controller */}
-          <CameraController mode={mode} isAuthenticated={isAuthenticated} />
+          <CameraController mode={mode} isAuthenticated={isAuthenticated} showWelcomeText={showWelcomeText} />
           
           {/* Shadows */}
           <ContactShadows 
