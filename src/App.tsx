@@ -153,7 +153,7 @@ const AppContent: React.FC = () => {
 
   // Show main app content if authenticated
   return (
-    <div className={`app min-h-screen ${isDark ? "dark" : ""}`}>
+    <div className={`app-content app min-h-screen ${isDark ? "dark" : ""}`}>
       {/* Main Content Container */}
       <div className="pb-20 min-h-screen">
         {currentPage === "dashboard" && (

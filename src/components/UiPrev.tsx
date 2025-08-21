@@ -484,7 +484,14 @@ const Dashboard: React.FC<DashboardProps> = ({ isDark, toggleTheme, onNavigate }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50/30 via-white to-purple-50/20 dark:from-gray-900 dark:via-black dark:to-gray-900 safe-area-inset pb-20">
+    <div className="min-h-screen pb-20 safe-area-inset" style={{ 
+      backgroundColor: "var(--homey-bg)",
+      backgroundImage: `
+        radial-gradient(circle at 15% 40%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 85%, rgba(236, 72, 153, 0.05) 0%, transparent 50%)
+      `
+    }}>
       
       {/* Subtle Particle Background */}
       <ParticleBackground isDark={isDark} particleCount={30} />
@@ -496,35 +503,35 @@ const Dashboard: React.FC<DashboardProps> = ({ isDark, toggleTheme, onNavigate }
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 400, damping: 30 }}
       >
-        <div className="px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo and Title */}
-            <div className="flex items-center gap-3">
-          <motion.div
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center relative overflow-hidden group"
+        <div className="px-3 sm:px-6 py-2 sm:py-4">
+          <div className="flex items-center justify-between gap-2">
+            {/* Logo and Title - Ultra compact for mobile */}
+            <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
+              <motion.div
+                className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center relative overflow-hidden group flex-shrink-0"
                 whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                <IconUsers className="w-6 h-6 text-white relative z-10" />
-          <motion.div 
+                <IconUsers className="w-4 h-4 sm:w-6 sm:h-6 text-white relative z-10" />
+                <motion.div 
                   className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"
                   initial={{ x: -100 }}
                   whileHover={{ x: 100 }}
                   transition={{ duration: 0.6 }}
                 />
-          </motion.div>
-              <div>
+              </motion.div>
+              <div className="min-w-0 flex-1 overflow-hidden">
                 <motion.h1 
-                  className="text-xl font-bold text-gradient refined-text-progressive-glow glass-text-accent streaming-light-text"
+                  className="text-base sm:text-xl font-bold text-gradient refined-text-progressive-glow glass-text-accent streaming-light-text truncate"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
-          >
+                >
                   Homey
                 </motion.h1>
                 <motion.p 
-                  className="refined-caption refined-text-subtle-glow glass-text"
+                  className="text-xs refined-caption refined-text-subtle-glow glass-text hidden sm:block truncate"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
@@ -532,33 +539,36 @@ const Dashboard: React.FC<DashboardProps> = ({ isDark, toggleTheme, onNavigate }
                   Smart roommate companion
                 </motion.p>
               </div>
-        </div>
+            </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-2">
+            {/* Actions - Very compact for mobile */}
+            <div className="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
               <ModernIconButton
                 icon={isDark ? IconSun : IconMoon}
-              onClick={toggleTheme}
+                onClick={toggleTheme}
                 variant="ghost"
-                tooltip={isDark ? "Switch to light mode" : "Switch to dark mode"}
-                className="hover-lift magnetic"
+                size="sm"
+                tooltip={isDark ? "Light" : "Dark"}
+                className="hover-lift magnetic !w-7 !h-7 sm:!w-10 sm:!h-10 !p-1 sm:!p-2"
               />
               
               <ModernIconButton
                 icon={IconBell}
                 variant="ghost"
+                size="sm"
                 pulse={mockData.notifications > 0}
                 tooltip="Notifications"
-              onClick={() => setShowNotifications(!showNotifications)}
-                className="hover-lift magnetic pulse-glow"
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="hover-lift magnetic pulse-glow !w-7 !h-7 sm:!w-10 sm:!h-10 !p-1 sm:!p-2"
               />
               
               <ModernIconButton
                 icon={IconSettings}
                 variant="ghost"
+                size="sm"
                 tooltip="Settings"
                 onClick={() => handleNavigation("settings")}
-                className="hover-lift magnetic"
+                className="hover-lift magnetic !w-7 !h-7 sm:!w-10 sm:!h-10 !p-1 sm:!p-2"
               />
             </div>
           </div>
@@ -577,27 +587,12 @@ const Dashboard: React.FC<DashboardProps> = ({ isDark, toggleTheme, onNavigate }
           variants={itemVariants}
           className="mb-4"
         >
-          <div className="flex items-center justify-between px-1">
+          <div className="flex items-center justify-between gap-2">
             {/* Minimal Welcome */}
-            <div className="flex items-center gap-3">
-              <motion.div
-                className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center text-white font-bold text-lg shadow-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              >
-                {mockData.user.avatar}
-                <motion.div 
-                  className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full border-2 border-white"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.3, type: "spring", stiffness: 500 }}
-                />
-              </motion.div>
-              
-              <div>
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <div className="min-w-0 flex-1">
                 <motion.h2 
-                  className="text-xl font-bold text-gray-900 dark:text-white"
+                  className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
@@ -610,34 +605,34 @@ const Dashboard: React.FC<DashboardProps> = ({ isDark, toggleTheme, onNavigate }
                   })()}, {mockData.user.name.split(' ')[0]}!
                 </motion.h2>
                 <motion.div
-                  className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
+                  className="flex items-center gap-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
-                  <span>{mockData.apartment.name}</span>
-                  <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-                  <span>{mockData.apartment.roommates} roommates</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0"></div>
+                  <span className="truncate">{mockData.apartment.name}</span>
+                  <div className="w-1 h-1 rounded-full bg-gray-400 flex-shrink-0"></div>
+                  <span className="flex-shrink-0">{mockData.apartment.roommates} roommates</span>
                 </motion.div>
               </div>
             </div>
 
-            {/* Compact Action Buttons */}
-            <div className="flex items-center gap-2">
+            {/* Compact Notification Button Only */}
+            <div className="flex items-center flex-shrink-0">
               {mockData.notifications > 0 && (
                 <motion.button
                   onClick={() => setShowNotifications(true)}
-                  className="relative p-2 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/50"
+                  className="relative p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/50"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <IconBell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  <IconBell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-300" />
                   <motion.div 
-                    className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center"
+                    className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 rounded-full flex items-center justify-center"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.6, type: "spring", stiffness: 500 }}
@@ -646,18 +641,6 @@ const Dashboard: React.FC<DashboardProps> = ({ isDark, toggleTheme, onNavigate }
                   </motion.div>
                 </motion.button>
               )}
-              
-              <motion.button
-                onClick={handleAddNew}
-                className="p-2 rounded-xl bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-lg"
-                whileHover={{ scale: 1.05, boxShadow: "0 8px 25px rgba(139, 92, 246, 0.3)" }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                <IconPlus className="w-5 h-5" />
-              </motion.button>
             </div>
           </div>
         </motion.section>

@@ -656,7 +656,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
   };
 
   return (
-    <div className="w-full h-screen relative overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900" style={{ touchAction: 'pan-x pan-y' }}>
+    <div className="auth-page-container w-full h-screen relative overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900" style={{ touchAction: 'pan-x pan-y' }}>
       
                   {/* Enhanced Glassmorphic Mode Switch UI */}
       <div className="absolute top-4 right-4 z-[9999] flex gap-2 pointer-events-auto" style={{ isolation: 'isolate', pointerEvents: 'auto' }}>

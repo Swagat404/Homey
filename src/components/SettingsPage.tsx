@@ -395,7 +395,14 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onBack, isDark, toggleTheme
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50/30 via-white to-purple-50/20 dark:from-gray-900 dark:via-black dark:to-gray-900 pb-20">
+    <div className="min-h-screen pb-20" style={{ 
+      backgroundColor: "var(--homey-bg)",
+      backgroundImage: `
+        radial-gradient(circle at 15% 40%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 85%, rgba(236, 72, 153, 0.05) 0%, transparent 50%)
+      `
+    }}>
       {/* Header */}
       <div className="sticky top-0 z-50 backdrop-blur-xl bg-white/[0.08] dark:bg-black/[0.20] border-b border-white/[0.12] dark:border-white/[0.08]">
         <div className="px-4 sm:px-6 py-4">

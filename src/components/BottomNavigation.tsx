@@ -26,10 +26,13 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentPage, onNavi
 
   return (
     <motion.div
-      className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-black/80 backdrop-blur-3xl border-t border-white/30 dark:border-white/10 shadow-lg shadow-purple-500/10"
+      className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-3xl border-t shadow-lg shadow-purple-500/10"
       style={{
         paddingBottom: 'env(safe-area-inset-bottom)',
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(139,92,246,0.1) 100%)'
+        background: isDark 
+          ? 'linear-gradient(135deg, rgba(17,24,39,0.95) 0%, rgba(139,92,246,0.15) 100%)'
+          : 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(139,92,246,0.1) 100%)',
+        borderTopColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.3)'
       }}
       initial={{ y: 100 }}
       animate={{ y: 0 }}

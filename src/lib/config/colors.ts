@@ -125,9 +125,9 @@ export const LIGHT_THEME_COLORS: ThemeColors = {
   primaryBright: MODERN_PALETTE.primary[500],
   primaryDark: MODERN_PALETTE.primary[700],
 
-  glassBackground: "rgba(255, 255, 255, 0.08)",
-  glassBorder: "rgba(168, 85, 247, 0.06)",
-  glassViolet: "rgba(168, 85, 247, 0.04)",
+  glassBackground: "rgba(255, 255, 255, 0.25)",
+  glassBorder: "rgba(168, 85, 247, 0.15)",
+  glassViolet: "rgba(168, 85, 247, 0.12)",
 
   text: MODERN_PALETTE.neutral[800],
   textSecondary: MODERN_PALETTE.neutral[600],
