@@ -20,6 +20,7 @@ import {
   IconSun,
 } from "@tabler/icons-react";
 import { ModernCard, ModernIconButton } from "./ui";
+import { useAuth } from "@/lib/contexts/AuthContext";
 
 interface SettingsPageProps {
   onBack: () => void;
@@ -36,8 +37,11 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onBack, isDark, toggleTheme
     announcements: true,
     email: false,
   });
+  
+  const { logout, user } = useAuth();
 
-  const currentUser = { name: "Alex Johnson", avatar: "AJ", email: "alex@homey.com" };
+  // Use actual user data from auth context, with fallback for demo
+  const currentUser = user || { name: "Alex Johnson", avatar: "AJ", email: "alex@homey.com" };
   
   const [roommates, setRoommates] = useState([
     { id: 1, name: "Alex Johnson", avatar: "AJ", status: "online", tasks: 3, email: "alex@homey.com", role: "admin" },
@@ -308,6 +312,29 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onBack, isDark, toggleTheme
           <button className="w-full px-4 py-3 bg-white/[0.08] border border-white/[0.12] rounded-xl backdrop-blur-xl text-left text-gray-500 dark:text-gray-400 hover:bg-white/[0.12] transition-colors">
             Change password...
           </button>
+        </div>
+      </ModernCard>
+
+      {/* Logout Section */}
+      <ModernCard variant="glass" className="p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+              <IconLogout className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+            </div>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">Sign Out</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Sign out of your account safely</p>
+            </div>
+          </div>
+          <motion.button
+            onClick={logout}
+            className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-medium hover:from-orange-600 hover:to-red-600 transition-all shadow-lg hover:shadow-xl"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Logout
+          </motion.button>
         </div>
       </ModernCard>
 
