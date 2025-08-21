@@ -1386,11 +1386,11 @@ const AuthPage: React.FC<AuthPageProps> = () => {
           
 
           
-          {/* Form in 3D Space - Close to House Center */}
+          {/* Form in 3D Space - Almost Touching House Center */}
           {showForm && (
             <FloatingForm
               mode={mode}
-              position={mode === 'login' ? [-1.2, 1.8, 3] : [1.2, 1.8, 3]}
+              position={mode === 'login' ? [-0.4, 1.8, 3] : [0.4, 1.8, 3]}
               onSubmit={mode === 'login' ? handleLogin : handleRegister}
               formData={mode === 'login' ? loginForm : registerForm}
               setFormData={mode === 'login' ? setLoginForm : setRegisterForm}
